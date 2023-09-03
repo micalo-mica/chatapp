@@ -27,16 +27,19 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await Register({
+      const { data } = await Register({
         variables: { register: { username, name, email, password } },
       });
-      if (data.addRegister.success) {
+      if (data.addRegister.success == true) {
         navigate("/login");
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  console.log(data);
+
   return (
     <div className=" h-[100vh] w-full p-4 flex items-center justify-center  bg-gray-900">
       <div className=" bg-gray-300 p-4 shadow-gray-400 shadow-xl">

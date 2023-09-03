@@ -35,7 +35,7 @@ export const ADD_LOGIN = gql`
         name
         email
         createdAt
-        updatedAts
+        updatedAt
         token
       }
     }

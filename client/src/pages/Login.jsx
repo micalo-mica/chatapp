@@ -24,9 +24,12 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await Login({ variables: { login: { email, password } } });
-      if (data.addLogin.success) {
+      const { data } = await Login({
+        variables: { login: { email, password } },
+      });
+      if (data.addLogin.success == true) {
         // save in local
+        localStorage.setItem("user", JSON.stringify(data.addLogin.credential));
         navigate("/");
       }
     } catch (error) {
@@ -63,7 +66,9 @@ function Login() {
               placeholder="your password"
             />
           </div>
-          <button className="p-2 border-none text-blue-500">login</button>
+          <button className="p-2 border-none text-blue-500" type="submit">
+            login
+          </button>
         </form>
         {/* forgot andr.... */}
         <div className="flex items-center justify-between mt-3">
