@@ -11,7 +11,8 @@ import typeDefs from "./graphql/typeDefs/index.js";
 import resolvers from "./graphql/resolvers/index.js";
 import * as dotenv from "dotenv";
 import connect from "./helpers/db.js";
-import context from "./context/context.js";
+import context from "./context/generateUserAuth.js";
+import generateUserAuth from "./context/generateUserAuth.js";
 
 dotenv.config();
 
@@ -32,14 +33,13 @@ const main = async () => {
 
   app.use(
     "/",
-    // cors(),
     cors({ origin: process.env.CLIENT_DOMAIN, credentials: true }),
 
     bodyParser.json({ limit: "50mb" }),
 
     expressMiddleware(server, {
       context: async ({ req }) => {
-        context;
+        generateUserAuth({ req });
       },
     })
   );

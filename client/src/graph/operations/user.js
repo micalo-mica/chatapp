@@ -42,17 +42,6 @@ export const ADD_LOGIN = gql`
   }
 `;
 
-// export const ADD_LOGIN = gql`
-//   mutation AddCreateUser($login: LoginInput!) {
-//     addLogin(login: $login) {
-//       _id
-//       name
-//       email
-//       success
-//     }
-//   }
-// `;
-
 // username
 export const ADD_USER_NAME = gql`
   mutation addUserName($username: String) {

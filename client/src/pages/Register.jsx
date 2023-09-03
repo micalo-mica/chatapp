@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ADD_SIGN_UP } from "../graph/operations/user";
+import { toast } from "react-toastify";
 
 function Register() {
   const navigate = useNavigate();
@@ -34,11 +35,9 @@ function Register() {
         navigate("/login");
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     }
   };
-
-  console.log(data);
 
   return (
     <div className=" h-[100vh] w-full p-4 flex items-center justify-center  bg-gray-900">

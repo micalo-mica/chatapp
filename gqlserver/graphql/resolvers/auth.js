@@ -1,9 +1,5 @@
 import UserModel from "../../models/user.model.js";
-import createError from "../../middleware/createError.js";
-import {
-  ALREADY_EXISTS,
-  BAD_USER_INPUT,
-} from "../../middleware/error-handler.helper.js";
+import { GraphQLError } from "graphql";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
@@ -17,7 +13,11 @@ const authResolver = {
       // check for user in db
       const isUserExists = await UserModel.findOne({ email });
       if (isUserExists) {
-        createError("user already exists!", ALREADY_EXISTS);
+        throw new GraphQLError("Invalid email or password entered.", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+          },
+        });
       }
 
       // to hash
@@ -44,13 +44,21 @@ const authResolver = {
       });
 
       if (!user) {
-        createError("Invalid email or password entered.", BAD_USER_INPUT);
+        throw new GraphQLError("Invalid email or password entered.", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+          },
+        });
       }
 
       // compare
       const isCorrect = bcrypt.compareSync(password, user.dbPassword);
       if (!isCorrect) {
-        createError("Invalid email or password entered.", BAD_USER_INPUT);
+        throw new GraphQLError("Invalid email or password entered.", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+          },
+        });
       }
 
       // send user detele

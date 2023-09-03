@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -23,7 +25,12 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <ToastContainer position="top-right" autoClose={5000} />
+    </>
+  );
 }
 
 export default App;

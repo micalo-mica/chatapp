@@ -4,14 +4,8 @@ import { setContext } from "@apollo/client/link/context";
 // import { split, HttpLink } from '@apollo/client';
 
 const authLink = setContext((_, { headers }) => {
-  // const { state } = useContext(AuthContext);
-  // console.log(state.user.token);
-  // get the authentication token from local storage if it exists
-  // const token = localStorage.getItem("user");
-  const token = localStorage.getItem("user");
-  // const { token } = user;
-  console.log(token);
-  // return the headers to the context so httpLink can read them
+  const user = JSON.parse(localStorage.getItem("user"));
+  const { token } = user;
   return {
     headers: {
       ...headers,

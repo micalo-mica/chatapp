@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
-import { UNAUTHENTICATED } from "../middleware/error-handler.helper.js";
-import createError from "../middleware/createError.js";
+import { GraphQLError } from "graphql";
 
 const getUser = async (token) => {
   try {
@@ -14,7 +13,7 @@ const getUser = async (token) => {
   }
 };
 
-const context = async ({ req, res }) => {
+const generateUserAuth = async ({ req }) => {
   //   console.log(req.body.operationName);
   if (req.body.operationName === "IntrospectionQuery") {
     // console.log('blocking introspection query..');
@@ -30,16 +29,21 @@ const context = async ({ req, res }) => {
 
   // get the user token from the headers
   const token = req.headers.authorization || "";
+  const splitToken = token.split(" ")[1];
 
   // try to retrieve a user with the token
-  const user = await getUser(token);
+  const user = await getUser(splitToken);
 
   if (!user) {
-    createError("User is not Authenticated", UNAUTHENTICATED);
+    throw new GraphQLError("You are not authorized to perform this action.", {
+      extensions: {
+        code: "FORBIDDEN",
+      },
+    });
   }
 
   // add the user to the context
   return { user };
 };
 
-export default context;
+export default generateUserAuth;
