@@ -2,10 +2,12 @@ import jwt from "jsonwebtoken";
 import { GraphQLError } from "graphql";
 
 const getUser = async (token) => {
+  const splitToken = token.split(" ")[1];
   try {
-    if (token) {
-      const user = jwt.verify(token, process.env.JWT_KEY);
+    if (splitToken) {
+      const user = jwt.verify(splitToken, process.env.JWT_KEY);
       return user;
+      console.log(user);
     }
     return null;
   } catch (error) {
@@ -13,7 +15,7 @@ const getUser = async (token) => {
   }
 };
 
-const generateUserAuth = async ({ req }) => {
+const createContext = async (req) => {
   //   console.log(req.body.operationName);
   if (req.body.operationName === "IntrospectionQuery") {
     // console.log('blocking introspection query..');
@@ -29,10 +31,9 @@ const generateUserAuth = async ({ req }) => {
 
   // get the user token from the headers
   const token = req.headers.authorization || "";
-  const splitToken = token.split(" ")[1];
 
   // try to retrieve a user with the token
-  const user = await getUser(splitToken);
+  const user = await getUser(token);
 
   if (!user) {
     throw new GraphQLError("You are not authorized to perform this action.", {
@@ -46,4 +47,4 @@ const generateUserAuth = async ({ req }) => {
   return { user };
 };
 
-export default generateUserAuth;
+export default createContext;

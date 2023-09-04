@@ -1,8 +1,16 @@
 import { useState } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { useLazyQuery } from "@apollo/client";
+import { SEARCH_USER } from "../graph/operations/user";
 
 function Modal({ openModal, setOpenModal }) {
   const [username, setUsername] = useState("");
+  const [searchUsers, { loading, error, data }] = useLazyQuery(SEARCH_USER);
+
+  const onSearch = async () => {
+    await searchUsers({ variables: { username } });
+  };
+
   return (
     <div
       className={
@@ -28,7 +36,11 @@ function Modal({ openModal, setOpenModal }) {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          <button className=" w-full py-1 px-1 border-solid border-2 border-gray-400 rounded-md">
+          <button
+            className=" w-full py-1 px-1 border-solid border-2 border-gray-400 rounded-md cursor-pointer"
+            // disabled={!username}
+            onClick={onSearch}
+          >
             search
           </button>
         </div>

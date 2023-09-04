@@ -11,8 +11,7 @@ import typeDefs from "./graphql/typeDefs/index.js";
 import resolvers from "./graphql/resolvers/index.js";
 import * as dotenv from "dotenv";
 import connect from "./helpers/db.js";
-import context from "./context/generateUserAuth.js";
-import generateUserAuth from "./context/generateUserAuth.js";
+import createContext from "./context/createContext.js";
 
 dotenv.config();
 
@@ -38,9 +37,7 @@ const main = async () => {
     bodyParser.json({ limit: "50mb" }),
 
     expressMiddleware(server, {
-      context: async ({ req }) => {
-        generateUserAuth({ req });
-      },
+      context: async ({ req }) => await createContext(req),
     })
   );
 

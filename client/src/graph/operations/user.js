@@ -42,10 +42,10 @@ export const ADD_LOGIN = gql`
   }
 `;
 
-// username
-export const ADD_USER_NAME = gql`
-  mutation addUserName($username: String) {
-    createUser(username: $username) {
+// search user
+export const SEARCH_USER = gql`
+  query addSearchUser($username: String) {
+    searchUsers(username: $username) {
       _id
       username
     }
