@@ -3,24 +3,13 @@ const { Schema } = mongoose;
 
 const conversationSchema = new Schema(
   {
-    userId: {
+    participantsIds: {
       type: [String],
       required: true,
-      unique: true,
-    },
-    participantsId: {
-      type: [String],
-      required: true,
-      unique: true,
     },
     lastMessage: {
       type: String,
-      required: true,
-      unique: true,
-    },
-    hasSeenLatestMessage: {
-      type: Boolean,
-      required: true,
+      required: false,
     },
   },
   {
