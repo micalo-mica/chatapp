@@ -12,7 +12,7 @@ function Participants({ participants, removeParticipant }) {
           >
             <h4 className="text-lg">{participant.username}</h4>
             <div
-              className="text-[1.6rem]"
+              className="text-[1.6rem] cursor-pointer"
               onClick={() => {
                 removeParticipant(participant._id);
               }}

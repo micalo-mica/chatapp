@@ -4,11 +4,21 @@ import { useLazyQuery } from "@apollo/client";
 import { SEARCH_USER } from "../graph/operations/user";
 import UserSearchList from "./UserSearchList";
 import Participants from "./Participants";
+import { toast } from "react-toastify";
 
 function Modal({ openModal, setOpenModal }) {
   const [username, setUsername] = useState("");
   const [participants, setParticipants] = useState([]);
   const [searchUsers, { loading, error, data }] = useLazyQuery(SEARCH_USER);
+
+  // to create conversation
+  const onCreateConversation = async () => {
+    try {
+      // create conversation on backend
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const onSearch = async () => {
     await searchUsers({ variables: { username } });
@@ -67,10 +77,15 @@ function Modal({ openModal, setOpenModal }) {
         )}
         {/*  */}
         {participants.length !== 0 && (
-          <Participants
-            participants={participants}
-            removeParticipant={removeParticipant}
-          />
+          <>
+            <Participants
+              participants={participants}
+              removeParticipant={removeParticipant}
+            />
+            <button className="p-1 rounded-lg shadow-sm shadow-gray-900 bg-slate-400 mt-4 cursor-pointer">
+              create conversation
+            </button>
+          </>
         )}
       </div>
     </div>
