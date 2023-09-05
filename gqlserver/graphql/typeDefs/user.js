@@ -1,12 +1,12 @@
 import gql from "graphql-tag";
 
 const userSchema = gql`
-  type User {
+  type SearchUser {
     _id: String
     username: String
   }
   type Query {
-    searchUsers(username: String): [User]
+    searchUsers(username: String): [SearchUser]
   }
 `;
 export default userSchema;

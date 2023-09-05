@@ -2,14 +2,28 @@ import { useState } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useLazyQuery } from "@apollo/client";
 import { SEARCH_USER } from "../graph/operations/user";
+import UserSearchList from "./UserSearchList";
+import Participants from "./Participants";
 
 function Modal({ openModal, setOpenModal }) {
   const [username, setUsername] = useState("");
+  const [participants, setParticipants] = useState([]);
   const [searchUsers, { loading, error, data }] = useLazyQuery(SEARCH_USER);
 
   const onSearch = async () => {
     await searchUsers({ variables: { username } });
   };
+
+  const addParticipant = (user) => {
+    setParticipants((prev) => [...prev, user]);
+    setUsername("");
+  };
+
+  const removeParticipant = (userId) => {
+    setParticipants((prev) => prev.filter((p) => p._id !== userId));
+  };
+
+  // console.log(participants);
 
   return (
     <div
@@ -44,6 +58,20 @@ function Modal({ openModal, setOpenModal }) {
             search
           </button>
         </div>
+        {/* results */}
+        {data?.searchUsers && (
+          <UserSearchList
+            users={data.searchUsers}
+            addParticipant={addParticipant}
+          />
+        )}
+        {/*  */}
+        {participants.length !== 0 && (
+          <Participants
+            participants={participants}
+            removeParticipant={removeParticipant}
+          />
+        )}
       </div>
     </div>
   );
