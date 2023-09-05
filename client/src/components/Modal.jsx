@@ -1,24 +1,37 @@
 import { useState } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { SEARCH_USER } from "../graph/operations/user";
 import UserSearchList from "./UserSearchList";
 import Participants from "./Participants";
 import { toast } from "react-toastify";
+import { CREATE_CONVERSATION } from "../graph/operations/conversation";
+import getCurrentUser from "../helper/getCurrentUser";
 
 function Modal({ openModal, setOpenModal }) {
   const [username, setUsername] = useState("");
   const [participants, setParticipants] = useState([]);
   const [searchUsers, { loading, error, data }] = useLazyQuery(SEARCH_USER);
+  const [createConversation, { loading: createConversationLoading }] =
+    useMutation(CREATE_CONVERSATION);
+  // to get current user me
+  const currentUser = getCurrentUser();
 
   // to create conversation
   const onCreateConversation = async () => {
+    const participantIds = [currentUser._id, ...participants.map((p) => p._id)];
+    // console.log(participantIds);
     try {
-      // create conversation on backend
+      const { data } = await createConversation({
+        variables: { participantIds },
+      });
+      console.log(data);
     } catch (error) {
       toast.error(error.message);
     }
   };
+
+  // console.log(currentUser);
 
   const onSearch = async () => {
     await searchUsers({ variables: { username } });
@@ -82,7 +95,10 @@ function Modal({ openModal, setOpenModal }) {
               participants={participants}
               removeParticipant={removeParticipant}
             />
-            <button className="p-1 rounded-lg shadow-sm shadow-gray-900 bg-slate-400 mt-4 cursor-pointer">
+            <button
+              className="p-1 rounded-lg shadow-sm shadow-gray-900 bg-slate-400 mt-4 cursor-pointer"
+              onClick={onCreateConversation}
+            >
               create conversation
             </button>
           </>

@@ -18,7 +18,7 @@ export const getSearchUser = async (username, currentUser) => {
     username: { $regex: username, $options: "i" },
     username: { $ne: currentUser },
   });
-  console.log(searchUser);
+
   if (!searchUser) {
     throw new GraphQLError("Username not found.", {
       extensions: {
