@@ -52,7 +52,7 @@ function Register() {
             <input
               type="text"
               name="username"
-              className=" h-12 rounded-lg px-2 w-72"
+              className=" h-12 rounded-lg px-2 w-72 text-black"
               placeholder="username"
               onChange={handleInfo}
             />
@@ -64,7 +64,7 @@ function Register() {
             <input
               type="text"
               name="name"
-              className=" h-12 rounded-lg px-2 w-72"
+              className=" h-12 rounded-lg px-2 w-72 text-black"
               placeholder="username"
               onChange={handleInfo}
             />
@@ -77,7 +77,7 @@ function Register() {
               type="text"
               name="email"
               placeholder="Your email"
-              className=" h-12 rounded-lg px-2 w-72"
+              className=" h-12 rounded-lg px-2 w-72 text-black"
               onChange={handleInfo}
             />
           </div>
@@ -89,7 +89,7 @@ function Register() {
               type="password"
               name="password"
               placeholder="Your password"
-              className="w-72 h-12 rounded-lg px-2 "
+              className="w-72 h-12 rounded-lg px-2  text-black"
               onChange={handleInfo}
             />
           </div>

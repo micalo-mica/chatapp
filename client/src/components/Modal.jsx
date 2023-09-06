@@ -7,8 +7,11 @@ import Participants from "./Participants";
 import { toast } from "react-toastify";
 import { CREATE_CONVERSATION } from "../graph/operations/conversation";
 import getCurrentUser from "../helper/getCurrentUser";
+import { useSearchParams } from "react-router-dom";
 
 function Modal({ openModal, setOpenModal }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [username, setUsername] = useState("");
   const [participants, setParticipants] = useState([]);
   const [searchUsers, { loading, error, data }] = useLazyQuery(SEARCH_USER);
@@ -20,13 +23,26 @@ function Modal({ openModal, setOpenModal }) {
   // to create conversation
   const onCreateConversation = async () => {
     const participantIds = [currentUser._id, ...participants.map((p) => p._id)];
-    // console.log(participantIds);
+
     try {
       const { data } = await createConversation({
         variables: { participantIds },
       });
+      // if (data?.createConversation) {
+      //   throw new Error("Failed to create conversation");
+      // }
+
       console.log(data);
+      // const {
+      //   createConversation: { conversation_id },
+      // } = data;
+      // setSearchParams({ conversation_id });
+      // close and clear everything
+      setParticipants([]);
+      setUsername("");
+      setOpenModal(false);
     } catch (error) {
+      console.log(error);
       toast.error(error.message);
     }
   };

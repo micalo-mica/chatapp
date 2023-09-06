@@ -22,6 +22,6 @@ const conversationParticipantSchema = new Schema(
 );
 
 export default mongoose.model(
-  "conversationParticipant",
+  "ConversationParticipant",
   conversationParticipantSchema
 );

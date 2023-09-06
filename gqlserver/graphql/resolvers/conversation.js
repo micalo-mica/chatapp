@@ -10,16 +10,18 @@ const conversationResolvers = {
         user: { _id: currentUserId },
       } = context;
       const { participantIds } = args;
-      const id = participantIds.filter((id) => {
-        return id === currentUserId;
-      });
-      const newConversation = new ConversationModal({
-        participantsIds: participantIds,
-        // hasSeenLatestMessage: id.toString() === currentUserId,
-      });
 
       try {
-        const savConversation = await newConversation.save();
+        // const newConversation = new ConversationModal({
+        //   participantsIds: participantIds,
+        // });
+
+        // conversation saved in database
+        // const savConversation = await newConversation.save();
+        console.log(participantIds);
+        const savConversation = await ConversationModal.create({
+          participantsIds: participantIds,
+        });
 
         if (!savConversation._id) {
           throw new GraphQLError("Something went wrong", {
@@ -28,19 +30,28 @@ const conversationResolvers = {
             },
           });
         }
-        // const { _id: conversation_id } = savConversation;
+
+        // console.log(savConversation._id);
         //   for participants, turn to array
         const turnToArray = participantIds.map((id) => ({
           userId: id,
           conversationId: savConversation._id.toString(),
           hasSeenLatestMessage: id === currentUserId,
         }));
-        // console.log(savConversation._id.toString());
-        // then save the participants
-        const saveParticipants = await ConversationParticipantModal.insertMany(
+        // participants saved in database
+        const saveParticipants = await ConversationParticipantModal.create(
           turnToArray
         );
-        console.log(saveParticipants);
+        // const saveParticipants = await ConversationParticipantModal.insertMany(
+        //   turnToArray
+        // );
+        // console.log(saveParticipants);
+        // console.log(savConversation._id.toString());
+        // emit conversation event
+
+        return {
+          aConversationId: savConversation._id.toString(),
+        };
       } catch (error) {}
     },
   },
