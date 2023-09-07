@@ -15,7 +15,7 @@ const getUser = async (token) => {
   }
 };
 
-const createContext = async (req) => {
+const createContext = async (req, pubsub) => {
   //   console.log(req.body.operationName);
   if (req.body.operationName === "IntrospectionQuery") {
     // console.log('blocking introspection query..');
@@ -44,7 +44,7 @@ const createContext = async (req) => {
   }
 
   // add the user to the context
-  return { user };
+  return { user, pubsub };
 };
 
 export default createContext;

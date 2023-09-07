@@ -9,3 +9,21 @@ export const CREATE_CONVERSATION = gql`
     }
   }
 `;
+
+// get user conversation
+export const GET_CONVERSATION = gql`
+  query GetUserConversation {
+    conversations {
+      _id
+    }
+  }
+`;
+
+// subscription
+export const GET_CONVERSATIONCREATED = gql`
+  subscription ConversationCreated {
+    conversationCreated {
+      _id
+    }
+  }
+`;

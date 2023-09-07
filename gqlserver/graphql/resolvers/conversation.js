@@ -3,7 +3,35 @@ import ConversationModal from "../../models/conversation.model.js";
 import ConversationParticipantModal from "../../models/conversationParticipant.model.js";
 
 const conversationResolvers = {
-  // Query:{},
+  Query: {
+    conversations: async (parent, args, context) => {
+      const { pubsub } = context;
+      const {
+        user: { _id: currentUserId },
+      } = context;
+      console.log(currentUserId);
+      try {
+        // find all the conversation user is part of
+        const userConversationsIn = await ConversationModal.find({
+          participantsIds: currentUserId,
+        });
+        console.log(userConversationsIn);
+        // publish an event
+        pubsub.publish("CONVERSATION_CREATED", {
+          conversationCreated: userConversationsIn,
+        });
+        // to get all message of that conversation
+        // console.log(userConversationsIn);
+        return userConversationsIn;
+      } catch (error) {
+        throw new GraphQLError("Something went wrong", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+          },
+        });
+      }
+    },
+  },
   Mutation: {
     createConversation: async (parent, args, context) => {
       const {
@@ -55,6 +83,21 @@ const conversationResolvers = {
       } catch (error) {}
     },
   },
+
+  Subscription: {
+    conversationCreated: {
+      subscribe: (parent, msg, context) => {
+        const { pubsub } = context;
+        pubsub.asyncIterator(["CONVERSATION_CREATED"]);
+      },
+    },
+  },
+
+  // =================others========================
+
+  // conversation:{
+  //   participant(parent)
+  // },
 };
 
 export default conversationResolvers;

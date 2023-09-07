@@ -17,7 +17,7 @@ function Modal({ openModal, setOpenModal }) {
   const [searchUsers, { loading, error, data }] = useLazyQuery(SEARCH_USER);
   const [createConversation, { loading: createConversationLoading }] =
     useMutation(CREATE_CONVERSATION);
-  // to get current user me
+  // to get current user me from local storage
   const currentUser = getCurrentUser();
 
   // to create conversation
@@ -28,15 +28,16 @@ function Modal({ openModal, setOpenModal }) {
       const { data } = await createConversation({
         variables: { participantIds },
       });
-      // if (data?.createConversation) {
-      //   throw new Error("Failed to create conversation");
-      // }
+      if (!data?.createConversation) {
+        throw new Error("Failed to create conversation");
+      }
 
-      console.log(data);
-      // const {
-      //   createConversation: { conversation_id },
-      // } = data;
-      // setSearchParams({ conversation_id });
+      const {
+        createConversation: { aConversationId },
+      } = data;
+      // console.log(aConversationId);
+      setSearchParams({ conId: aConversationId });
+
       // close and clear everything
       setParticipants([]);
       setUsername("");

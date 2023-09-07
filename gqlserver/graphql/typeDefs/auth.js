@@ -29,7 +29,6 @@ const authSchema = gql`
     createdAt: String
     updatedAt: String
     token: String
-    # userJwtToken: JwtToken
   }
 
   type RegisterGood {
